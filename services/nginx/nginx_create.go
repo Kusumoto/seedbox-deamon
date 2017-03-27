@@ -13,10 +13,14 @@ import (
 func CreateNignxContainer(cxt context.Context, cli *client.Client, config *NginxConfig, netconfig *seedboxNet.NetworkConfig) error {
 	containerHostConfig := container.HostConfig{}
 	hostConfig := container.Config{}
-	networkConfig := network.NetworkingConfig{
-		EndpointsConfig: map["torrent_net"]network.EndpointSettings{
-			Gateway:   netconfig.Gateway,
-			NetworkID: netconfig.NetworkID,
-		},
+	
+	// Setter network configuration
+	networkEndpointSetting := make(map[string]*network.EndpointSettings)
+	networkEndpointSetting["torrent_net"] = network.EndpointSettings{
+		Gateway:   netconfig.Gateway,
+		NetworkID: netconfig.NetworkID,
 	}
+	networkConfig := network.NetworkingConfig{
+		EndpointsConfig: networkEndpointSetting,
+	},
 }
