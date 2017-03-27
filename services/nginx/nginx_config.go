@@ -5,7 +5,12 @@ type NginxConfig struct {
 	ContainerID     string
 	ContainerName   string
 	ImageName       string
-	TorrentPath     string
-	Port            int
+	SrcTorrentPath  string
+	DestTorrentPath string
+	NginxConfig     string
+	Port            string
 	LimitConnection int
 }
+
+// NginxImageName holds constant define nginx image name
+const NginxImageName = "nginx:stable"
