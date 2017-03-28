@@ -2,11 +2,13 @@ package disk
 
 import (
 	"os/exec"
+	"strconv"
 )
 
 // CreateVirtualDisk create a virtual disk from specification
 func CreateVirtualDisk(config *DiskConfig) error {
-	err := exec.Command("dd", "if=/dev/zero", "of="+config.DiskLocation+"/"+config.DiskName+".img", "bs=512k", "count=200").Run()
+	totalCount := config.DiskSize / 512
+	err := exec.Command("dd", "if=/dev/zero", "of="+config.DiskLocation+"/"+config.DiskName+".img", "bs=512k", "count="+strconv.Itoa(totalCount)).Run()
 	if err != nil {
 		return err
 	}
