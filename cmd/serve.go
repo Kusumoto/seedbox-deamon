@@ -15,8 +15,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/kusumoto/seedbox-daemon/api"
 	"github.com/spf13/cobra"
 )
 
@@ -27,7 +26,7 @@ var serveCmd = &cobra.Command{
 	Long:  `Start seedbox daemon.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: Work your own magic here
-		fmt.Println("serve called")
+		api.StartAPIServer()
 	},
 }
 

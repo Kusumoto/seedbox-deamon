@@ -1,12 +1,8 @@
 package network
 
-import (
-	"context"
-
-	"github.com/docker/docker/client"
-)
+import docker "github.com/fsouza/go-dockerclient"
 
 // RemoveNetwork remove a docker network
-func RemoveNetwork(ctx context.Context, cli *client.Client, config *NetworkConfig) error {
-	return cli.NetworkRemove(ctx, config.NetworkID)
+func RemoveNetwork(cli *docker.Client, config *NetworkConfig) error {
+	return cli.RemoveNetwork(config.NetoworkName)
 }
