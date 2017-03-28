@@ -7,12 +7,12 @@ import (
 	"github.com/kusumoto/seedbox-daemon/services/network"
 )
 
-// CreateNignxContainer create a lasted nginx container and configuration from API endpoint
+// CreateTransmissionContainer create a lasted transmission container and configuration from API endpoint
 func CreateTransmissionContainer(cli *docker.Client, config *TransmissionConfig, netconfig *network.NetworkConfig) (*docker.Container, error) {
 	// Setting container data binding
-	torrentBindPath := []string{config.SrcTorrentPath, config.DestTorrentPath}
-	nginxSiteEnableConfigBindPath := []string{config.NginxConfig, "/etc/nginx/sites-enabled"}
-	nginxSiteAvailableConfigBindPath := []string{config.NginxConfig, "/etc/nginx/sites-available"}
+	torrentBindPath := []string{config.SrcTorrentPath, "/var/lib/transmission-daemon/downloads"}
+	torrentSettingBindPath := []string{config.SrcConfigPath, "/var/lib/transmission-daemon/info"}
+	torrentIncompleteBindPath := []string{config.SrcIncompleteTorrentPath, "/var/lib/transmission-daemon/incomplete"}
 	networkEndpointSetting := make(map[string]*docker.EndpointConfig)
 	// Setting container network
 	networkEndpointSetting["torrent_net"] = &docker.EndpointConfig{
@@ -26,7 +26,7 @@ func CreateTransmissionContainer(cli *docker.Client, config *TransmissionConfig,
 			EndpointsConfig: networkEndpointSetting,
 		},
 		HostConfig: &docker.HostConfig{
-			Binds: []string{strings.Join(torrentBindPath, ":"), strings.Join(nginxSiteEnableConfigBindPath, ":"), strings.Join(nginxSiteAvailableConfigBindPath, ":")},
+			Binds: []string{strings.Join(torrentBindPath, ":"), strings.Join(torrentSettingBindPath, ":"), strings.Join(torrentIncompleteBindPath, ":")},
 		},
 	}
 	// Create Container

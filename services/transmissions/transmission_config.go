@@ -5,13 +5,16 @@ import (
 	"github.com/kusumoto/seedbox-daemon/services/network"
 )
 
+// TransmissionConfig holds parameters to configuration transmission container setting
 type TransmissionConfig struct {
 	ContainerID               string
 	ContainerName             string
 	ImageName                 string
 	SrcTorrentPath            string
-	DestTorrentPath           string
-	ConfigPath                string
+	SrcConfigPath             string
+	SrcIncompleteTorrentPath  string
+	Username                  string
+	Password                  string
 	Port                      int
 	LimitTorrentWorking       int
 	LimitTorrentSeed          int
@@ -29,7 +32,7 @@ type Transmission interface {
 }
 
 // TransmissionImageName holds constant define transmission image name
-const TransmissionImageName = "nginx"
+const TransmissionImageName = "dperson/transmission"
 
 // TransmissionImageTag holds constant define transmission image tag
-const TransmissionImageTag = "stable"
+const TransmissionImageTag = "latest"
