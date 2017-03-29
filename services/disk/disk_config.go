@@ -10,4 +10,5 @@ type DiskConfig struct {
 // Disk interface for disk control implementation
 type Disk interface {
 	CreateVirtualDisk(config *DiskConfig) error
+	RemoveVirtualDisk(config *DiskConfig) error
 }
