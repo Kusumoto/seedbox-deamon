@@ -24,9 +24,25 @@ func StartAPIServer() {
 
 	daemonAPI := app.Party("/api", endpointAPIMiddleware)
 	{
-		// http://0.0.0.0:4444/api/installation
-		// Method: "GET"
-		daemonAPI.Get("/installation", postEndPointInstallation)
+		installationAPI := daemonAPI.Party("/installation")
+		{
+			// http://0.0.0.0:4444/api/installation
+			// Method: "POST"
+			installationAPI.Post("/", postEndPointInstallation)
+			// http://0.0.0.0:4444/api/installation/callback
+			// Method: "Post"
+			installationAPI.Post("/callback", postEndPointInstallationCallback)
+		}
+		containerAPI := daemonAPI.Party("/container")
+		{
+			// http://0.0.0.0:4444/api/container/create
+			// Method: "Post"
+			containerAPI.Post("/create", postCreateContainer)
+			// http://0.0.0.0:4444/api/container/remove
+			// Method: "Post"
+			containerAPI.Post("/remove", postRemoveContainer)
+		}
+
 	}
 	app.Listen(":4444")
 }
@@ -37,19 +53,25 @@ func endpointAPIMiddleware(ctx *iris.Context) {
 }
 
 func endPointNotFoundHandler(ctx *iris.Context) {
-	ctx.JSON(404, httpResponseStructure{Status: 404, Message: "Endpoint not found!"})
+	ctx.JSON(iris.StatusNotFound, httpResponseStructure{Status: 404, Message: "endpoint not found!"})
 }
 
 func postEndPointInstallation(ctx *iris.Context) {
 	resultData := installationResult{}
 	resultData.installEndpoint()
+	ctx.JSON(resultData.responseStatus, resultData)
+}
+
+func postEndPointInstallationCallback(ctx *iris.Context) {
+	resultData := installationResult{}
+	resultData.installEndpoint()
 	ctx.JSON(resultData.responseStatus, resultData.responseAccessToken)
 }
 
-func getByIDHandler(ctx *iris.Context) {
+func postCreateContainer(ctx *iris.Context) {
 
 }
 
-func saveUserHandler(ctx *iris.Context) {
-	// your code here...
+func postRemoveContainer(ctx *iris.Context) {
+
 }

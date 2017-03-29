@@ -6,9 +6,9 @@ import (
 )
 
 type installationResult struct {
-	responseStatus      int
-	responseMessage     string
-	responseAccessToken string
+	responseStatus      int    `json:"responseStatus"`
+	responseMessage     string `json:"responseMessage"`
+	responseAccessToken string `json:"responseAccessToken"`
 }
 
 func (result *installationResult) installEndpoint() {
@@ -23,8 +23,12 @@ func (result *installationResult) generateAccessToken() {
 	for i := 0; i < defaultAccessTokenLength; i++ {
 		tokenResult[i] = chars[rand.Intn(len(chars))]
 	}
+	result.responseMessage = "Success"
+	result.responseStatus = 200
 	result.responseAccessToken = string(tokenResult)
 }
 
 func (result *installationResult) checkInstallationProcess() {
+	result.responseMessage = "Success"
+	result.responseStatus = 200
 }
