@@ -6,6 +6,7 @@ import (
 
 // CreateNetwork create a docker network for encapsulate a container
 func CreateNetwork(cli *docker.Client, config *NetworkConfig) (*docker.Network, error) {
+	// Setting network
 	var netoworkOptions = docker.CreateNetworkOptions{
 		CheckDuplicate: true,
 		Driver:         "bridge",
@@ -19,5 +20,6 @@ func CreateNetwork(cli *docker.Client, config *NetworkConfig) (*docker.Network, 
 			},
 		},
 	}
+	// Create network
 	return cli.CreateNetwork(netoworkOptions)
 }

@@ -25,7 +25,6 @@ var serveCmd = &cobra.Command{
 	Short: "Start seedbox daemon.",
 	Long:  `Start seedbox daemon.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// TODO: Work your own magic here
 		api.StartAPIServer()
 	},
 }
