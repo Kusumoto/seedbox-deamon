@@ -7,12 +7,12 @@ import (
 )
 
 type createNewContainerResult struct {
-	DiskConfig         disk.DiskConfig                  `json:"DiskConfig"`
-	NginxConfig        nginx.NginxConfig                `json:"NginxConfig"`
-	TransmissionConfig transmissions.TransmissionConfig `json:"TransmissionConfig"`
+	DiskConfig         disk.DiskConfig                  `json:"disk_config"`
+	NginxConfig        nginx.NginxConfig                `json:"nginx_config"`
+	TransmissionConfig transmissions.TransmissionConfig `json:"transmission_config"`
 	AccessToken        string
-	ResponseStatus     int    `json:"responseStatus"`
-	ResponseMessage    string `json:"responseMessage"`
+	ResponseStatus     int    `json:"response_status"`
+	ResponseMessage    string `json:"response_message"`
 }
 
 func (result *createNewContainerResult) createNewContainerEndpoint() {

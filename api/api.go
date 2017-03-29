@@ -59,13 +59,13 @@ func endPointNotFoundHandler(ctx *iris.Context) {
 func postEndPointInstallation(ctx *iris.Context) {
 	resultData := installationResult{}
 	resultData.installEndpoint()
-	ctx.JSON(resultData.responseStatus, resultData)
+	ctx.JSON(resultData.ResponseStatus, resultData)
 }
 
 func postEndPointInstallationCallback(ctx *iris.Context) {
 	resultData := installationResult{}
 	resultData.installEndpoint()
-	ctx.JSON(resultData.responseStatus, resultData.responseAccessToken)
+	ctx.JSON(resultData.ResponseStatus, resultData.ResponseAccessToken)
 }
 
 func postCreateContainer(ctx *iris.Context) {

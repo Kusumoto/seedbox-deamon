@@ -4,4 +4,4 @@ package api
 const defaultDockerEndpoint = "unix:///var/run/docker.sock"
 
 // defaultAccessTokenLength is default access token lenge
-const defaultAccessTokenLength = 30
+const defaultAccessTokenLength = 100
