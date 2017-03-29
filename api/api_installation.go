@@ -11,7 +11,7 @@ type installationResult struct {
 	responseAccessToken string
 }
 
-func (result *installationResult) InstallEndpoint() {
+func (result *installationResult) installEndpoint() {
 	result.checkInstallationProcess()
 	result.generateAccessToken()
 }

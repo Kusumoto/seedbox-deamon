@@ -15,40 +15,41 @@ type httpResponseStructure struct {
 func StartAPIServer() {
 	app := iris.New()
 	app.Adapt(
-		// iris.DevLogger(),
+		iris.DevLogger(),
 		httprouter.New(),
 		cors.New(cors.Options{AllowedOrigins: []string{"*"}}))
 
-	// Route: /
-	// Method: "GET"
-	// Hello Wolrd!
-	app.Get("/", func(ctx *iris.Context) {
-		ctx.JSON(200, httpResponseStructure{
-			Message: "seedbox-daemon up and running.",
-			Status:  200,
-		})
-	})
+	// Fire endPointNotFoundHandler when Not Found
+	app.OnError(404, endPointNotFoundHandler)
 
-	// Route: /api/installer
-	// Method: "GET"
-	// Initization and pair with web portal control panel
-	app.Get("/api/installer", func(ctx *iris.Context) {
-		ctx.JSON(200, httpResponseStructure{
-			Message: "seedbox-daemon initization and pair with control panel.",
-			Status:  200,
-		})
-	})
-
-	// Route: /api/status
-	// Method: "GET"
-	// Inside docker and container infomation
-	app.Get("/api/status", func(ctx *iris.Context) {
-		ctx.JSON(200, httpResponseStructure{
-			Message: "seedbox-daemon inside docker and container infomation.",
-			Status:  200,
-		})
-	})
-
-	// Start the server at 0.0.0.0:4444
+	daemonAPI := app.Party("/api", endpointAPIMiddleware)
+	{
+		// http://0.0.0.0:4444/api/installation
+		// Method: "GET"
+		daemonAPI.Get("/installation", postEndPointInstallation)
+	}
 	app.Listen(":4444")
+}
+
+func endpointAPIMiddleware(ctx *iris.Context) {
+	println("Request: " + ctx.Path())
+	ctx.Next()
+}
+
+func endPointNotFoundHandler(ctx *iris.Context) {
+	ctx.JSON(404, httpResponseStructure{Status: 404, Message: "Endpoint not found!"})
+}
+
+func postEndPointInstallation(ctx *iris.Context) {
+	resultData := installationResult{}
+	resultData.installEndpoint()
+	ctx.JSON(resultData.responseStatus, resultData.responseAccessToken)
+}
+
+func getByIDHandler(ctx *iris.Context) {
+
+}
+
+func saveUserHandler(ctx *iris.Context) {
+	// your code here...
 }
