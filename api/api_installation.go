@@ -3,6 +3,8 @@ package api
 import (
 	"math/rand"
 	"time"
+
+	iris "gopkg.in/kataras/iris.v6"
 )
 
 type installationResult struct {
@@ -17,18 +19,23 @@ func (result *installationResult) installEndpoint() {
 }
 
 func (result *installationResult) generateAccessToken() {
+
+	if result.ResponseStatus != iris.StatusOK {
+		return
+	}
+
 	rand.Seed(time.Now().UTC().UnixNano())
 	const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
 	tokenResult := make([]byte, defaultAccessTokenLength)
 	for i := 0; i < defaultAccessTokenLength; i++ {
 		tokenResult[i] = chars[rand.Intn(len(chars))]
 	}
-	result.ResponseMessage = "Success"
-	result.ResponseStatus = 200
+	result.ResponseMessage = "success"
+	result.ResponseStatus = iris.StatusOK
 	result.ResponseAccessToken = string(tokenResult)
 }
 
 func (result *installationResult) checkInstallationProcess() {
-	result.ResponseMessage = "Success"
-	result.ResponseStatus = 200
+	result.ResponseMessage = "success"
+	result.ResponseStatus = iris.StatusOK
 }

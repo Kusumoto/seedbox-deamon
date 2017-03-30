@@ -7,8 +7,8 @@ import (
 )
 
 type httpResponseStructure struct {
-	Status  int    `json:"Status"`
-	Message string `json:"Message"`
+	Status  int    `json:"response_status"`
+	Message string `json:"response_message"`
 }
 
 // StartAPIServer start the API server
@@ -21,14 +21,16 @@ func StartAPIServer() {
 
 	// Fire endPointNotFoundHandler when Not Found
 	app.OnError(404, endPointNotFoundHandler)
+	// Fire endPointInternalServerErrorHandler when Internal Server Error
+	app.OnError(500, endPointInternalServerErrorHandler)
 
 	daemonAPI := app.Party("/api", endpointAPIMiddleware)
 	{
 		installationAPI := daemonAPI.Party("/installation")
 		{
 			// http://0.0.0.0:4444/api/installation
-			// Method: "POST"
-			installationAPI.Post("/", postEndPointInstallation)
+			// Method: "Get"
+			installationAPI.Get("/", postEndPointInstallation)
 			// http://0.0.0.0:4444/api/installation/callback
 			// Method: "Post"
 			installationAPI.Post("/callback", postEndPointInstallationCallback)
@@ -52,8 +54,13 @@ func endpointAPIMiddleware(ctx *iris.Context) {
 	ctx.Next()
 }
 
+func endPointInternalServerErrorHandler(ctx *iris.Context) {
+	println("Error:" + ctx.Err().Error())
+	ctx.JSON(iris.StatusInternalServerError, httpResponseStructure{Status: iris.StatusInternalServerError, Message: "internal server error!"})
+}
+
 func endPointNotFoundHandler(ctx *iris.Context) {
-	ctx.JSON(iris.StatusNotFound, httpResponseStructure{Status: 404, Message: "endpoint not found!"})
+	ctx.JSON(iris.StatusNotFound, httpResponseStructure{Status: iris.StatusNotFound, Message: "endpoint not found!"})
 }
 
 func postEndPointInstallation(ctx *iris.Context) {
@@ -69,7 +76,14 @@ func postEndPointInstallationCallback(ctx *iris.Context) {
 }
 
 func postCreateContainer(ctx *iris.Context) {
-
+	resultData := createNewContainerResult{}
+	client, err := NewDockerClient()
+	if err != nil {
+		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		return
+	}
+	resultData.createNewContainerEndpoint(client)
+	ctx.JSON(resultData.ResponseStatus, resultData)
 }
 
 func postRemoveContainer(ctx *iris.Context) {
