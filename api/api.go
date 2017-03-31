@@ -34,6 +34,9 @@ func StartAPIServer() {
 			// http://0.0.0.0:4444/api/installation/callback
 			// Method: "Post"
 			installationAPI.Post("/callback", postEndPointInstallationCallback)
+			// http://0.0.0.0:4444/api/installation/reset
+			// Method: "Post"
+			installationAPI.Post("/reset", postEndPointInstallationReset)
 		}
 		containerAPI := daemonAPI.Party("/container")
 		{
@@ -44,7 +47,6 @@ func StartAPIServer() {
 			// Method: "Post"
 			containerAPI.Post("/remove", postRemoveContainer)
 		}
-
 	}
 	app.Listen(":4444")
 }
@@ -63,6 +65,18 @@ func endPointNotFoundHandler(ctx *iris.Context) {
 	ctx.JSON(iris.StatusNotFound, httpResponseStructure{Status: iris.StatusNotFound, Message: "endpoint not found!"})
 }
 
+func postEndPointInstallationReset(ctx *iris.Context) {
+	resultData := installationResult{}
+	requestData := installationRequestData{}
+	err := ctx.ReadJSON(&requestData)
+	if err != nil {
+		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		return
+	}
+	resultData.removeEndpoint(&requestData)
+	ctx.JSON(resultData.ResponseStatus, resultData)
+}
+
 func postEndPointInstallation(ctx *iris.Context) {
 	resultData := installationResult{}
 	resultData.installEndpoint()
@@ -70,9 +84,15 @@ func postEndPointInstallation(ctx *iris.Context) {
 }
 
 func postEndPointInstallationCallback(ctx *iris.Context) {
+	requestData := installationRequestData{}
 	resultData := installationResult{}
-	resultData.installEndpoint()
-	ctx.JSON(resultData.ResponseStatus, resultData.ResponseAccessToken)
+	err := ctx.ReadJSON(&requestData)
+	if err != nil {
+		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		return
+	}
+	resultData.installCallbackEndpoint(&requestData)
+	ctx.JSON(resultData.ResponseStatus, resultData)
 }
 
 func postCreateContainer(ctx *iris.Context) {
