@@ -70,7 +70,7 @@ func postEndPointInstallationReset(ctx *iris.Context) {
 	requestData := installationRequestData{}
 	err := ctx.ReadJSON(&requestData)
 	if err != nil {
-		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		ctx.JSON(iris.StatusInternalServerError, httpResponseStructure{Status: iris.StatusInternalServerError, Message: err.Error()})
 		return
 	}
 	resultData.removeEndpoint(&requestData)
@@ -88,7 +88,7 @@ func postEndPointInstallationCallback(ctx *iris.Context) {
 	resultData := installationResult{}
 	err := ctx.ReadJSON(&requestData)
 	if err != nil {
-		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		ctx.JSON(iris.StatusInternalServerError, httpResponseStructure{Status: iris.StatusInternalServerError, Message: err.Error()})
 		return
 	}
 	resultData.installCallbackEndpoint(&requestData)
@@ -99,7 +99,12 @@ func postCreateContainer(ctx *iris.Context) {
 	resultData := createNewContainerResult{}
 	client, err := NewDockerClient()
 	if err != nil {
-		ctx.JSON(iris.StatusInternalServerError, err.Error())
+		ctx.JSON(iris.StatusInternalServerError, httpResponseStructure{Status: iris.StatusInternalServerError, Message: err.Error()})
+		return
+	}
+	err = ctx.ReadJSON(&resultData)
+	if err != nil {
+		ctx.JSON(iris.StatusInternalServerError, httpResponseStructure{Status: iris.StatusInternalServerError, Message: err.Error()})
 		return
 	}
 	resultData.createNewContainerEndpoint(client)

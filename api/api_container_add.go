@@ -26,13 +26,20 @@ func (result *createNewContainerResult) createNewContainerEndpoint(cli docker.Cl
 }
 
 func (result *createNewContainerResult) createNetwork(cli docker.Client) {
+	networkResult, err := network.CreateNetwork(&cli, &result.NetworkConfig)
+	result.NetworkConfig.NetworkID = networkResult.ID
 }
 
 func (result *createNewContainerResult) createVirtualDisk(cli docker.Client) {
+	err := disk.CreateVirtualDisk(&result.DiskConfig)
 }
 
 func (result *createNewContainerResult) createNginxContainer(cli docker.Client) {
+	nginxResult, err := nginx.CreateNignxContainer(&cli, &result.NginxConfig, &result.NetworkConfig)
+	result.NginxConfig.ContainerID = nginxResult.ID
 }
 
 func (result *createNewContainerResult) createTransmissionsContainer(cli docker.Client) {
+	transmissionsResult, err := transmissions.CreateTransmissionContainer(&cli, &result.TransmissionConfig, &result.NetworkConfig)
+	result.TransmissionConfig.ContainerID = transmissionsResult.ID
 }
