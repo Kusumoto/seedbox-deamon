@@ -7,14 +7,14 @@ import (
 
 // NginxConfig holds parameters to configuration nginx container setting
 type NginxConfig struct {
-	ContainerID     string
-	ContainerName   string
-	ImageName       string
-	SrcTorrentPath  string
-	DestTorrentPath string
-	NginxConfig     string
-	Port            string
-	LimitConnection int
+	ContainerID     string `json:"nginx_container_id"`
+	ContainerName   string `json:"nginx_container_name"`
+	ImageName       string `json:"nginx_image_name"`
+	SrcTorrentPath  string `json:"nginx_src_torrent_path"`
+	DestTorrentPath string `json:"nginx_dest_torrent_path"`
+	NginxConfig     string `json:"nginx_config"`
+	Port            string `json:"nginx_port"`
+	LimitConnection int    `json:"nginx_limit_connection"`
 }
 
 // Nginx interface for nginx control implementation
