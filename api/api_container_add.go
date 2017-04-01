@@ -21,6 +21,7 @@ type createNewContainerResult struct {
 }
 
 func (result *createNewContainerResult) createNewContainerEndpoint(cli docker.Client) {
+	result.ResponseStatus = iris.StatusOK
 	if !models.CheckInstallationStatus() {
 		result.ResponseStatus = iris.StatusForbidden
 		result.ResponseMessage = "this daemon has been not install"
@@ -38,6 +39,9 @@ func (result *createNewContainerResult) createNewContainerEndpoint(cli docker.Cl
 }
 
 func (result *createNewContainerResult) createNetwork(cli docker.Client) {
+	if result.ResponseStatus != iris.StatusOK {
+		return
+	}
 	networkResult, err := network.CreateNetwork(&cli, &result.NetworkConfig)
 	if err != nil {
 		result.ResponseStatus = iris.StatusInternalServerError
