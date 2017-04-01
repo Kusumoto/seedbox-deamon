@@ -10,6 +10,7 @@ import (
 	"gopkg.in/kataras/iris.v6"
 )
 
+// createNewContainerResult is model for response container creation result
 type createNewContainerResult struct {
 	DiskConfig         disk.DiskConfig                  `json:"disk_config"`
 	NginxConfig        nginx.NginxConfig                `json:"nginx_config"`

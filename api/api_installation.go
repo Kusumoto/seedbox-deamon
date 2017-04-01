@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/kusumoto/seedbox-daemon/api/models"
-	_ "github.com/mattn/go-sqlite3"
 
 	iris "gopkg.in/kataras/iris.v6"
 )

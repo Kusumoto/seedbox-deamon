@@ -20,8 +20,8 @@ func InitDatabase() *sql.DB {
 	}
 	sqlStmt := `
 	CREATE TABLE IF NOT EXISTS installation (is_already_installed boolean, access_token text);
-	CREATE TABLE IF NOT EXISTS container (id integer not null primary key autoincrement, container_id text, container_name text, image_name text, author text);
-	CREATE TABLE IF NOT EXISTS network (id integer not null primary key autoincrement, network_id text, network_name text, author text);
+	CREATE TABLE IF NOT EXISTS containers (id integer not null primary key autoincrement, container_id text, container_name text, image_name text, network_id text, author text);
+	CREATE TABLE IF NOT EXISTS networks (id integer not null primary key autoincrement, network_id text, network_name text, author text);
 	`
 	_, err = db.Exec(sqlStmt)
 	if err != nil {
